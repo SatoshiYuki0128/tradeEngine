@@ -13,8 +13,10 @@ var routes []model.Route
 
 func init() {
 	fmt.Println("Start serving...")
-	register("POST", "/test", controller.Test, nil)
+	//register("POST", "/test", controller.Test, nil)
 	register("POST", "/Trade/sell", controller.Sell, nil)
+	register("POST", "/Trade/buy", controller.Buy, nil)
+	register("POST", "/Trade/search", controller.Search, nil)
 }
 
 func NewRouter() http.Handler {

@@ -6,11 +6,15 @@ import (
 
 // Sell serviceCode:S1
 func Sell(flowData *model.FlowData, controllerCode string) {
-	_, isOK := findBuyerAndSell(flowData, controllerCode, "S1")
-	if !isOK {
-		return
-	}
+	findBuyerAndSell(flowData, controllerCode, "S1")
 }
 
-//1 find buyer
-//2 if
+// Buy serviceCode:S2
+func Buy(flowData *model.FlowData, controllerCode string) {
+	findSellerAndBuy(flowData, controllerCode, "S2")
+}
+
+// Search serviceCode:S3
+func Search(flowData *model.FlowData, controllerCode string) {
+	searchTrade(flowData, controllerCode, "S3")
+}
