@@ -18,7 +18,7 @@ func findBuyerAndSell(flowData *model.FlowData, controllerCode, serviceCode stri
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			service.SetError(flowData, controllerCode, serviceCode, "S1", "DB關閉失敗", err)
 		}
 	}(db)
 
@@ -109,7 +109,7 @@ func findSellerAndBuy(flowData *model.FlowData, controllerCode, serviceCode stri
 
 		if id == -1 {
 			query = "insert into Trade(type, quantity, price, close, updateTime) values ('buy', ?, ?, 0, now());"
-			_, err := db.Exec(query, remain, req.Price)
+			_, err = db.Exec(query, remain, req.Price)
 			if err != nil {
 				service.SetError(flowData, controllerCode, serviceCode, "S2", "DB寫入失敗", err)
 				return
@@ -120,7 +120,7 @@ func findSellerAndBuy(flowData *model.FlowData, controllerCode, serviceCode stri
 		} else if quantity-remain > 0 {
 			seller = append(seller, id)
 			query = "update Trade set quantity = ?, updateTime = now() where id = ?;"
-			_, err := db.Exec(query, quantity-remain, id)
+			_, err = db.Exec(query, quantity-remain, id)
 			if err != nil {
 				service.SetError(flowData, controllerCode, serviceCode, "S2", "DB更新失敗", err)
 				return
@@ -131,7 +131,7 @@ func findSellerAndBuy(flowData *model.FlowData, controllerCode, serviceCode stri
 		} else if quantity-remain == 0 {
 			seller = append(seller, id)
 			query = "update Trade set quantity = 0, close = 1, updateTime = now() where id = ?;"
-			_, err := db.Exec(query, id)
+			_, err = db.Exec(query, id)
 			if err != nil {
 				service.SetError(flowData, controllerCode, serviceCode, "S2", "DB更新失敗", err)
 				return
@@ -142,7 +142,7 @@ func findSellerAndBuy(flowData *model.FlowData, controllerCode, serviceCode stri
 		} else {
 			seller = append(seller, id)
 			query = "update Trade set quantity = 0, close = 1, updateTime = now() where id = ?;"
-			_, err := db.Exec(query, id)
+			_, err = db.Exec(query, id)
 			if err != nil {
 				service.SetError(flowData, controllerCode, serviceCode, "S2", "DB更新失敗", err)
 				return
